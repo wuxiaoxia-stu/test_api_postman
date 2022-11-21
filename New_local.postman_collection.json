@@ -1,0 +1,1276 @@
+{
+	"info": {
+		"_postman_id": "bc47c94d-8b79-49e6-860e-e74df4831bfe",
+		"name": "New_local",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15373199"
+	},
+	"item": [
+		{
+			"name": "病例管理",
+			"item": [
+				{
+					"name": "获取检查配置信息-实时分析",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9006/api/check/options?type=1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"check",
+								"options"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取检查配置信息-质控考核",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9006/api/check/options?type=2",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"check",
+								"options"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "通过检查id 获取已选择的切面列表",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "check_id",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "127.0.0.1:9006/api/check/info?check_id=196658a9-1273-45fa-9ecb-c97320092f00",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"check",
+								"info"
+							],
+							"query": [
+								{
+									"key": "check_id",
+									"value": "196658a9-1273-45fa-9ecb-c97320092f00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "创建病例",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"响应中包含case_id\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"case_id\");\r",
+									"});\r",
+									"\r",
+									"//使用json提取器提取token值\r",
+									"// 把responseBody转为json字符串\r",
+									"var respData = JSON.parse(responseBody);\r",
+									"// 设置全局变量token，供后面的接口引用\r",
+									"pm.environment.set(\"case_id\", respData.data.case_id);\r",
+									"console.log(respData.data.case_id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"serial_number\": \"{{serial_number}}\",\r\n    \"case_type\": 1,\r\n    \"check_id\": \"196658a9-1273-45fa-9ecb-c97320092f00\",\r\n    \"multi_group_id\": \"\",\r\n    \"multi_index\": 0,\r\n    \"plane_list\": []\r\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}/api/case/create",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"case",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新病例",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"case_id\": {{case_id}},\r\n\"doctor_name\": \"医生名称1\",\r\n\"department_name\": \"科室\",\r\n\"case_path\": \"D:\\\\case\\\\00234316523513550\\\\2208\\\\19\\\\1660892514\",\r\n\"fetus_name\": \"单胎\",\r\n\"join_flag\": 1,\r\n\"case_length\": 11,\r\n\"patient_id\": \"1660892514\",\r\n\"patient_name\": \"病人名称1\",\r\n\"patient_age\": 30,\r\n\"patient_sex\": 1,\r\n\"patient_accession_no\": \"1\",\r\n\"case_result_status\": \"3\",\r\n\"ga_aua\": \"2200\",\r\n\"ga_lmp\": \"2210\",\r\n\"lmp_date\": \"2210\"\r\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}/api/case/update",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"case",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取时间线",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "case_type",
+									"value": "3",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "check_type",
+									"value": "2",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "check_level",
+									"value": "3",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "join_flag",
+									"value": "1",
+									"description": "续接标记，1表示续接，0表示不续接",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "case_result",
+									"value": "0",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "time_begin",
+									"value": "2022-08-01",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "time_end",
+									"value": "2022-08-21",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "case_length_min",
+									"value": "12",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "case_length_max",
+									"value": "10",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}/api/case/time-line",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"case",
+								"time-line"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "历史病例",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 获取当前日期\r",
+									"var date = new Date();\r",
+									" \r",
+									"// 获取当前月份\r",
+									"var nowMonth = date.getMonth() + 1;\r",
+									" \r",
+									"// 获取当前是几号\r",
+									"var strDate = date.getDate();\r",
+									" \r",
+									"// 添加分隔符“-”\r",
+									"var seperator = \"-\";\r",
+									" \r",
+									"// 对月份进行处理，1-9月在前面添加一个“0”\r",
+									"if (nowMonth >= 1 && nowMonth <= 9) {\r",
+									"   nowMonth = \"0\" + nowMonth;\r",
+									"}\r",
+									" \r",
+									"// 对月份进行处理，1-9号在前面添加一个“0”\r",
+									"if (strDate >= 0 && strDate <= 9) {\r",
+									"   strDate = \"0\" + strDate;\r",
+									"}\r",
+									" \r",
+									"// 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期\r",
+									"var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;\r",
+									"pm.environment.set(\"nowDate\", nowDate);\r",
+									"console.log(nowDate);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"dates\": [\"2022-07-01\", \"{{nowDate}}\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/case/list",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"case",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除病例",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"ids\":[{{case_id}},\"2206001910000000\"],\"password\":\"123456\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/case/delete",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"case",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "客户端授权",
+			"item": [
+				{
+					"name": "1、根据设备UUID查看授权状态",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"响应中包含licence\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"licence\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"uuid\" : \"032E02B4-0499-05A9-8206-950700080009\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{cloudhost}}/api/authorize/status",
+							"host": [
+								"{{cloudhost}}"
+							],
+							"path": [
+								"api",
+								"authorize",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2、获取授权Ukey信息",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"code 为0\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cloudhost}}/api/authorize/ukey-info?ukey_serial_number=19EB813AC40E209A",
+							"host": [
+								"{{cloudhost}}"
+							],
+							"path": [
+								"api",
+								"authorize",
+								"ukey-info"
+							],
+							"query": [
+								{
+									"key": "ukey_serial_number",
+									"value": "19EB813AC40E209A"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3、查询订单信息",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cloudhost}}/api/authorize/query-order?serial_number=22083011021532301",
+							"host": [
+								"{{cloudhost}}"
+							],
+							"path": [
+								"api",
+								"authorize",
+								"query-order"
+							],
+							"query": [
+								{
+									"key": "serial_number",
+									"value": "22083011021532301"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4、生成授权license",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ai_version\": \"NVIDIA GeForce RTX 2070 SUPER\",\r\n    \"baseboard_id\": \"Default string\",\r\n    \"client_version\": \"PUS V_3.0.0.0\",\r\n    \"cpu_id\": \"BFEBFBFF000906ED\",\r\n    \"cpu_name\": \"Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz\",\r\n    \"disk_id\": \"WDC WD20EZAZ-00GGJB0__WD-WXH2A7017XJU***SAMSUNG MZVLB256HAHQ-00000__0025_3888_91B6_F8F7.***WDC WD20EZAZ-00GGJB0__WD-WXQ1AC82041D\",\r\n    \"gpu_name\": \"NVIDIA GeForce RTX 2070 SUPER\",\r\n    \"serial_number\": \"22083011021532301\",\r\n    \"signature\": \"0sQFpmlnmfI+TiiMw7RwEtINTMzvGp37wJILQTib+nyjWrI1mlMxN+Y/Ud9XRtaflt8g8/GUYJogWtcrZ3keZaJZ7ZLAD8f7UKTVjXpABSy4ohT2X6eF9BAAARZXMRV5oIwIn7319r3q3XdZrV6HfuJpoYtKHQxWS9KXi+MJZ/8=\",\r\n    \"ukey_serial_number\": \"19EB813AC40E209A\",\r\n    \"uuid\": \"032E02B4-0499-05A9-8206-950700080009\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cloudhost}}/api/authorize/create-licence",
+							"host": [
+								"{{cloudhost}}"
+							],
+							"path": [
+								"api",
+								"authorize",
+								"create-licence"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1、证书验证",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json, text/plain, */*",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"client_version\" : \"PUS V_3.0.0.0\",\r\n   \"cpu_id\" : \"{{cpu_id}}\",\r\n   \"signature\" : \"{{ukey_signature}}\",\r\n   \"uuid\" : \"{{uuid}}\"\r\n}\r\n\r\n"
+						},
+						"url": {
+							"raw": "{{webhost}}/api/v1/authorize/auth_query_status/",
+							"host": [
+								"{{webhost}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authorize",
+								"auth_query_status",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.6、激活",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n   \"author_number\" : \"{{author_number}}\",\r\n   \"floor\" : \"A11\",\r\n   \"machine_brand\" : \"A11\",\r\n   \"machine_number\" : \"GLE\",\r\n   \"room\" : \"A11\",\r\n   \"serial_number\" : \"{{device_serial_number}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{webhost}}/api/v1/authorize/auth_client_activate/",
+							"host": [
+								"{{webhost}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authorize",
+								"auth_client_activate",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.9、升级续费设备",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n   \"serial_number\" : \"{{device_serial_number}}\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{webhost}}/api/v1/authorize/auth_update_need/",
+							"host": [
+								"{{webhost}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authorize",
+								"auth_update_need",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "用户管理",
+			"item": [
+				{
+					"name": "获取用户列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"响应中包含 管理员\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"管理员\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9006/api/user/list",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户登录",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"响应中包含token\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"token\");\r",
+									"});\r",
+									"\r",
+									"//使用json提取器提取token值\r",
+									"// 把responseBody转为json字符串\r",
+									"var respData = JSON.parse(responseBody);\r",
+									"// 设置全局变量token，供后面的接口引用\r",
+									"pm.environment.set(\"token\", respData.data.token);\r",
+									"console.log(respData.data.token)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"author_number\" : \"{{author_number}}\",\r\n   \"password\" : \"c86038fe04bc7097e218b4fd6b767f4b\",\r\n   \"user_id\" : 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9006/api/user/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户刷新user token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:9006/api/user/refresh-token",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"user",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户退出",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9006/api/user/logout",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "保存用户列表",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "author-number",
+								"value": "{{author_number}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"user_data\" : \"W3siZGVsZXRlX2F0IjowLCJwYXNzd29yZCI6ImM4NjAzOGZlMDRiYzcwOTdlMjE4YjRmZDZiNzY3ZjRiIiwicm9sZV9uYW1lIjoi566h55CG5ZGYIiwicm9sZV90eXBlIjowLCJ1cGRhdGVfYXQiOjE2NjAyNzI5MTcsInVzZXJfaWQiOjEsInVzZXJuYW1lIjoiYWRtaW4ifSx7ImRlbGV0ZV9hdCI6MCwicGFzc3dvcmQiOiJjODYwMzhmZTA0YmM3MDk3ZTIxOGI0ZmQ2Yjc2N2Y0YiIsInJvbGVfbmFtZSI6IuaZrumAmueUqOaItyIsInJvbGVfdHlwZSI6MSwidXBkYXRlX2F0IjoxNjYwMjcyOTE3LCJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InVzZXIifV0=\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9006/api/user/save",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"user",
+								"save"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "主任密钥",
+			"item": [
+				{
+					"name": "查询主任秘钥绑定状态",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:9006/api/leader-key/status",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"leader-key",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "绑定主任密钥",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"author_number\" : \"C_22060015\",\r\n   \"leader_serial_number\" : \"SZU4201116000166\",\r\n   \"user_data\" : \"eyJjb2RlIjowLCJkYXRhIjp7ImxlYWRlcl9rZXlfY29kZSI6InN6MTY2In0sIm1zZyI6Im9rIn0=\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9006/api/leader-key/bind",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"leader-key",
+								"bind"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "配对",
+			"item": [
+				{
+					"name": "查询配对状态",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:9006/api/pair/status?author_number=C_22060015",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"pair",
+								"status"
+							],
+							"query": [
+								{
+									"key": "author_number",
+									"value": "C_22060015"
+								},
+								{
+									"key": "serial_number",
+									"value": "22062217402617102",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "解除配对",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"author_number\" : \"C_22080004\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9006/api/pair/break",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"pair",
+								"break"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "申请配对",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"author_number\" : \"C_22060015\",\r\n   \"serial_number\" : \"22062217402617101\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9006/api/pair/apply",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"pair",
+								"apply"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "远程质控",
+			"item": [
+				{
+					"name": "获取图形验证码",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var captchaId = \"\";\r",
+									"if(jsonData.code == 0){\r",
+									"captchaId = jsonData.data.captcha_id;\r",
+									"pm.environment.set(\"captchaId\", captchaId);\r",
+									"}\r",
+									"let template=` \r",
+									"<h1>{{title}}</h1>\r",
+									"captchaId:{{response.data.captcha_id}}<br/>\r",
+									"<img src = '{{response.data.base64}}' />`\r",
+									"\r",
+									"pm.visualizer.set(template, {title:\"获取图形验证码\", response:pm.response.json()})\r",
+									"console.log(captchaId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9006/api//public/captcha",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9006",
+							"path": [
+								"api",
+								"",
+								"public",
+								"captcha"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"disabled": true
+		}
+	]
+}
